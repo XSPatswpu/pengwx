@@ -12,10 +12,10 @@ import org.wxstudy.pengwx.system.utils.WxUtils;
  * Date: Created in 2018/2/28 下午3:04
  */
 @RestController
-@RequestMapping(value = "/wx-message")
+//@RequestMapping(value = "/wx-common")
 public class WxConnectController {
 
-    @GetMapping(value = "/signature")
+//    @GetMapping(value = "/message")
     public String wxConnect(@RequestParam("signature") String signature,@RequestParam("timestamp")String timestamp,
                             @RequestParam("nonce") String nonce , @RequestParam("echostr") String echostr){
         //调用检查签名方法

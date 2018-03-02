@@ -16,10 +16,10 @@ import java.util.Map;
  * Date: Created in 2018/2/28 下午7:41
  */
 @RestController
-@RequestMapping(value = "/wx-message")
+@RequestMapping(value = "/wx-common")
 public class WxMessageController {
 
-    @PostMapping(value = "/text")
+    @PostMapping(value = "/message")
     public String textMessage(HttpServletRequest request){
 
         //从微信后台接受消息
