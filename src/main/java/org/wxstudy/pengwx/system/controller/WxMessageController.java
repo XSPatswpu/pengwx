@@ -1,13 +1,14 @@
 package org.wxstudy.pengwx.system.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.wxstudy.pengwx.system.pojos.TextMessage;
+import org.wxstudy.pengwx.system.configs.MessageConfig;
 import org.wxstudy.pengwx.system.utils.WxMessageUtils;
+import org.wxstudy.pengwx.system.utils.WxUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -18,6 +19,9 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/wx-common")
 public class WxMessageController {
+
+    @Autowired
+    private MessageConfig messageConfig;
 
     @PostMapping(value = "/message")
     public String textMessage(HttpServletRequest request){
@@ -31,22 +35,27 @@ public class WxMessageController {
         String fromUserName = messageMap.get("FromUserName");
         String msgType = messageMap.get("MsgType");
         String content = messageMap.get("Content");
+        String event = messageMap.get("Event");
 
-        System.out.println("toUserName:" + toUserName);
-        System.out.println("fromUserName:" + fromUserName);
-        System.out.println("msgType:" + msgType);
-        System.out.println("content:" + content);
-
+        //给微信后台响应的消息
         String message = null;
-        if("text".equals(msgType)){//如果消息类型为text，则给微信端返回xml
-            TextMessage textMessage = new TextMessage();
-            textMessage.setContent("您发送的消息是：" + content);
-            textMessage.setFromUserName(toUserName);
-            textMessage.setToUserName(fromUserName);
-            textMessage.setMsgType("text");
-            textMessage.setCreateTime(new Date().getTime());
-            message = WxMessageUtils.textMessageToXml(textMessage);
-            System.out.println(message);
+
+        if(WxMessageUtils.MESSAGE_TEXT.equals(msgType)){//如果消息类型为text，则给微信端返回xml
+            if("1".equals(content)){
+                message = WxMessageUtils.initMessage(messageConfig.getSelfInfo(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+            }else if("2".equals(content)){
+                message = WxMessageUtils.initMessage(messageConfig.getCompanyInfo(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+            }else if("?".equals(content) || "？".equals(content)){
+                message = WxMessageUtils.initMessage(messageConfig.getSubscribeMsg(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+            }else{
+                message = WxMessageUtils.initMessage("对不起，你的消息劳资不认识！",toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+            }
+
+        }else if(WxMessageUtils.MESSAGE_EVENT.equals(msgType)){//如果消息类型为event
+            if(WxMessageUtils.EVENT_SUBSCRIBE.equals(event)){//事件类型为subscribe
+                //初始化消息并发送给微信后台
+                message = WxMessageUtils.initMessage(messageConfig.getSubscribeMsg(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+            }
         }
 
         return message;
