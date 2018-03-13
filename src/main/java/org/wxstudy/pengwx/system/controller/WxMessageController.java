@@ -40,21 +40,21 @@ public class WxMessageController {
         //给微信后台响应的消息
         String message = null;
 
-        if(WxMessageUtils.MESSAGE_TEXT.equals(msgType)){//如果消息类型为text，则给微信端返回xml
+        if(WxUtils.MESSAGE_TEXT.equals(msgType)){//如果消息类型为text，则给微信端返回xml
             if("1".equals(content)){
-                message = WxMessageUtils.initMessage(messageConfig.getSelfInfo(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+                message = WxMessageUtils.initNewsMsg(messageConfig,toUserName,fromUserName);
             }else if("2".equals(content)){
-                message = WxMessageUtils.initMessage(messageConfig.getCompanyInfo(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+                message = WxMessageUtils.initTextMsg(messageConfig.getCompanyInfo(),toUserName,fromUserName);
             }else if("?".equals(content) || "？".equals(content)){
-                message = WxMessageUtils.initMessage(messageConfig.getSubscribeMsg(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+                message = WxMessageUtils.initTextMsg(messageConfig.getSubscribeMsg(),toUserName,fromUserName);
             }else{
-                message = WxMessageUtils.initMessage("对不起，你的消息劳资不认识！",toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+                message = WxMessageUtils.initTextMsg("对不起，你的消息劳资不认识！",toUserName,fromUserName);
             }
 
-        }else if(WxMessageUtils.MESSAGE_EVENT.equals(msgType)){//如果消息类型为event
-            if(WxMessageUtils.EVENT_SUBSCRIBE.equals(event)){//事件类型为subscribe
+        }else if(WxUtils.MESSAGE_EVENT.equals(msgType)){//如果消息类型为event
+            if(WxUtils.EVENT_SUBSCRIBE.equals(event)){//事件类型为subscribe
                 //初始化消息并发送给微信后台
-                message = WxMessageUtils.initMessage(messageConfig.getSubscribeMsg(),toUserName,fromUserName, WxMessageUtils.MESSAGE_TEXT);
+                message = WxMessageUtils.initTextMsg(messageConfig.getSubscribeMsg(),toUserName,fromUserName);
             }
         }
 

@@ -23,4 +23,13 @@ public class MessageConfig {
     private String selfInfo;
 
     private String companyInfo;
+
+    private String title;//文章标题
+
+    private String description;//文章描述
+
+    private String picUrl;
+
+    private String url;
+
 }

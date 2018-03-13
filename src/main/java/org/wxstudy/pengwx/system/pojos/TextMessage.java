@@ -12,17 +12,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class TextMessage {
-
-    private String ToUserName;
-
-    private String FromUserName;
-
-    private Long CreateTime;
-
-    private String MsgType;
-
+public class TextMessage extends BaseMessage {
     private String Content;
-
-    private String MsgId;
 }
