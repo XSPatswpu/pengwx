@@ -57,6 +57,23 @@
 			<version>1.0.2</version>
 		</dependency>
 
+		<!--JSONObject-->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.3</version>
+			<!--由于这个jar包末尾会有不同的jdk版本实现-->
+			<!--这个classifier的作用是在文件后后面加上jdk15，去直接找到jar包-->
+			<classifier>jdk15</classifier>
+		</dependency>
+
+		<!--apache httpClient-->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -6,9 +6,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.wxstudy.pengwx.system.configs.MessageConfig;
-import org.wxstudy.pengwx.system.pojos.News;
-import org.wxstudy.pengwx.system.pojos.NewsMessage;
-import org.wxstudy.pengwx.system.pojos.TextMessage;
+import org.wxstudy.pengwx.system.pojos.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -102,7 +100,20 @@ public class WxMessageUtils {
     }
 
     /**
-     * 初始化NewsMessage
+     * 图片消息转xml
+     * @param imageMsg 图片消息
+     * @return xml
+     */
+    public static String imageToXml(ImageMessage imageMsg){
+        XStream xstream = new XStream();
+
+        xstream.alias("xml",imageMsg.getClass());
+
+        return xstream.toXML(imageMsg);
+    }
+
+    /**
+     * 初始化图文消息
      * @param msgConfig 消息配置类
      * @param toUserName 开发者账号
      * @param fromUserName 用户账号
@@ -124,6 +135,27 @@ public class WxMessageUtils {
         newsList.add(news);
         newsMsg.setArticles(newsList);
         String msg = newsToXml(newsMsg);
+        System.out.println(msg);
+        return msg;
+    }
+
+    /**
+     * 初始化图片消息
+     * @param mediaId 图片消息mediaId
+     * @param toUserName 开发者账号
+     * @param fromUserName 用户账号
+     * @return xml
+     */
+    public static String initImageMsg(String mediaId,String toUserName,String fromUserName){
+        ImageMessage imageMessage = new ImageMessage();
+        imageMessage.setFromUserName(toUserName);
+        imageMessage.setToUserName(fromUserName);
+        WxImage image = new WxImage();
+        image.setMediaId(mediaId);
+        imageMessage.setImage(image);
+        imageMessage.setMsgType(WxUtils.MESSAGE_IMAGE);
+        imageMessage.setCreateTime(new Date().getTime());
+        String msg = WxMessageUtils.imageToXml(imageMessage);
         System.out.println(msg);
         return msg;
     }

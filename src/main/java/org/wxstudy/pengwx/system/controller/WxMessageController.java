@@ -47,6 +47,8 @@ public class WxMessageController {
                 message = WxMessageUtils.initTextMsg(messageConfig.getCompanyInfo(),toUserName,fromUserName);
             }else if("?".equals(content) || "？".equals(content)){
                 message = WxMessageUtils.initTextMsg(messageConfig.getSubscribeMsg(),toUserName,fromUserName);
+            }else if("3".equals(content)){
+                message = WxMessageUtils.initImageMsg("ilp0JPpJnNQ_1uwNEn-lXvBDxZDWqOygRAiH0hHUCiCWrCfi87yEvC-dqZkr6aAV",toUserName,fromUserName);
             }else{
                 message = WxMessageUtils.initTextMsg("对不起，你的消息劳资不认识！",toUserName,fromUserName);
             }
