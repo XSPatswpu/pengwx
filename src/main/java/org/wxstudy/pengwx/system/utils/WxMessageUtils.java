@@ -5,8 +5,13 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.wxstudy.pengwx.system.configs.CompanyConfig;
 import org.wxstudy.pengwx.system.configs.MessageConfig;
 import org.wxstudy.pengwx.system.pojos.*;
+import org.wxstudy.pengwx.system.pojos.message.ImageMessage;
+import org.wxstudy.pengwx.system.pojos.message.News;
+import org.wxstudy.pengwx.system.pojos.message.NewsMessage;
+import org.wxstudy.pengwx.system.pojos.message.TextMessage;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -135,9 +140,28 @@ public class WxMessageUtils {
         newsList.add(news);
         newsMsg.setArticles(newsList);
         String msg = newsToXml(newsMsg);
-        System.out.println(msg);
         return msg;
     }
+
+    public static String initNewsMsg(CompanyConfig msgConfig, String toUserName, String fromUserName){
+        NewsMessage newsMsg = new NewsMessage();
+        newsMsg.setToUserName(fromUserName);
+        newsMsg.setFromUserName(toUserName);
+        newsMsg.setMsgType(WxUtils.MESSAGE_NEWS);
+        newsMsg.setCreateTime(new Date().getTime());
+        newsMsg.setArticleCount(1);
+        List<News> newsList = new ArrayList<>();
+        News news = new News();
+        news.setTitle(msgConfig.getTitle());
+        news.setDescription(msgConfig.getDescription());
+        news.setPicUrl(msgConfig.getPicUrl());
+        news.setUrl(msgConfig.getUrl());
+        newsList.add(news);
+        newsMsg.setArticles(newsList);
+        String msg = newsToXml(newsMsg);
+        return msg;
+    }
+
 
     /**
      * 初始化图片消息

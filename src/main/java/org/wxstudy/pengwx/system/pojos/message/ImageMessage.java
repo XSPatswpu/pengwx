@@ -1,8 +1,10 @@
-package org.wxstudy.pengwx.system.pojos;
+package org.wxstudy.pengwx.system.pojos.message;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.wxstudy.pengwx.system.pojos.WxImage;
+import org.wxstudy.pengwx.system.pojos.message.BaseMessage;
 
 /**
  * Author: peng

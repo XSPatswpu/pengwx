@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.wxstudy.pengwx.system.configs.CompanyConfig;
 import org.wxstudy.pengwx.system.configs.MessageConfig;
 import org.wxstudy.pengwx.system.utils.WxMessageUtils;
 import org.wxstudy.pengwx.system.utils.WxUtils;
@@ -23,6 +24,9 @@ public class WxMessageController {
     @Autowired
     private MessageConfig messageConfig;
 
+    @Autowired
+    private CompanyConfig companyConfig;
+
     @PostMapping(value = "/message")
     public String textMessage(HttpServletRequest request){
 
@@ -36,6 +40,7 @@ public class WxMessageController {
         String msgType = messageMap.get("MsgType");
         String content = messageMap.get("Content");
         String event = messageMap.get("Event");
+        String eventKey = messageMap.get("EventKey");
 
         //给微信后台响应的消息
         String message = null;
@@ -57,6 +62,14 @@ public class WxMessageController {
             if(WxUtils.EVENT_SUBSCRIBE.equals(event)){//事件类型为subscribe
                 //初始化消息并发送给微信后台
                 message = WxMessageUtils.initTextMsg(messageConfig.getSubscribeMsg(),toUserName,fromUserName);
+            }else if(WxUtils.EVENT_CLICK.equals(event)){
+                if("author".equals(eventKey)){
+                    //发送作者简介
+                    message = WxMessageUtils.initNewsMsg(messageConfig,toUserName,fromUserName);
+                }else if("company".equals(eventKey)){
+                    //发送公司简介
+                    message = WxMessageUtils.initNewsMsg(companyConfig,toUserName,fromUserName);
+                }
             }
         }
 
